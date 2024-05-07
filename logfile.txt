@@ -1,0 +1,9 @@
+2024-05-07 02:38:03,191 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-07 02:43:43,638 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-07 02:43:43,638 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-07 02:43:53,905 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-07 03:18:44,136 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-07 03:18:44,137 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-07 03:18:59,181 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-07 03:19:08,756 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-07 03:19:08,757 - apscheduler.scheduler - INFO - Scheduler has been shut down

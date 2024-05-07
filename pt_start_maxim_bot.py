@@ -24,47 +24,90 @@ def start(update: Update, context):
     user = update.effective_user
     update.message.reply_text(f'Привет, {user.full_name}!')
 
-
 def helpCommand(update: Update, context):
     update.message.reply_text('Help!')
 
+def findEmailsCommand(update: Update, context):
+    update.message.reply_text('Введите текст для поиска email-адресов: ')
+    return 'findEmails'
 
 def findPhoneNumbersCommand(update: Update, context):
     update.message.reply_text('Введите текст для поиска телефонных номеров: ')
-
     return 'findPhoneNumbers'
 
-def get_app_list_command(update: Update, context):
-    update.message.reply_text('Введите 1, если хотите видеть все установленные пакеты; введите 2, если хотите видеть информацию о конкретном пакете: ')
+def verifyPasswordCommand(update: Update, context):
+    update.message.reply_text('Введите пароль для проверки сложности: ')
+    return 'verifyPassword'
+
+def findEmails(update: Update, context):
     user_input = update.message.text
-    if user_input == '1':
-        return 'get_app_list_all'
-    if user_input == '2':
-        return 'get_app_list_one'
-    update.message.reply_text('Неверный ввод!')
+    emailRegex = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b') # регулярное выражение для поиска email-адресов
+    emailList = emailRegex.findall(user_input)
 
+    if not emailList:
+        update.message.reply_text('Email-адреса не найдены')
+        return ConversationHandler.END 
 
+    emails = ''
+    for i, email in enumerate(emailList):
+        emails += f'{i+1}. {email}\n'
+    
+    update.message.reply_text(emails)
+    return ConversationHandler.END
 
 def findPhoneNumbers(update: Update, context):
-    user_input = update.message.text # Получаем текст, содержащий (или нет) номера телефонов
+    user_input = update.message.text
+    phoneNumRegex = re.compile(r'(?:\+7|8)[\- ]?\(?(\d{3})\)?[\- ]?(\d{3})[\- ]?(\d{2})[\- ]?(\d{2})')
+    phoneNumberList = phoneNumRegex.findall(user_input)
 
-    phoneNumRegex = re.compile(r'8 \(\d{3}\) \d{3}-\d{2}-\d{2}') # формат 8 (000) 000-00-00
-
-    phoneNumberList = phoneNumRegex.findall(user_input) # Ищем номера телефонов
-
-    if not phoneNumberList: # Обрабатываем случай, когда номеров телефонов нет
+    if not phoneNumberList:
         update.message.reply_text('Телефонные номера не найдены')
-        return # Завершаем выполнение функции
+        return ConversationHandler.END 
+
+    phoneNumbers = ''
+    for i, phoneNumber in enumerate(phoneNumberList):
+        formatted_number = ''.join(phoneNumber)
+        phoneNumbers += f'{i+1}. {formatted_number}\n'
     
-    phoneNumbers = '' # Создаем строку, в которую будем записывать номера телефонов
-    for i in range(len(phoneNumberList)):
-        phoneNumbers += f'{i+1}. {phoneNumberList[i]}\n' # Записываем очередной номер
-        
-    update.message.reply_text(phoneNumbers) # Отправляем сообщение пользователю
-    return ConversationHandler.END # Завершаем работу обработчика диалога
+    update.message.reply_text(phoneNumbers)
+    return ConversationHandler.END 
 
-def get_app_list(update: Update, context):
+def verifyPassword(update: Update, context):
+    user_input = update.message.text
+    passwordRegex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+    if passwordRegex.match(user_input):
+        update.message.reply_text('Пароль сложный')
+    else:
+        update.message.reply_text('Пароль простой')
+    return ConversationHandler.END
 
+def get_app_list_all(update: Update, context):
+    update.message.reply_text(linux('dpkg -l | head -n 11'))
+    return ConversationHandler.END
+
+def get_app_list_one(update: Update, context):
+    update.message.reply_text('Введите название пакета для поиска информации: ')
+    return 'get_app_info'
+
+def get_app_info(update: Update, context):
+    package_name = update.message.text.strip()
+    app_info = linux(f'dpkg -s {package_name}')
+    update.message.reply_text(app_info)
+    return ConversationHandler.END
+
+def get_app_list_command(update: Update, context):
+    update.message.reply_text('Введите 1, если хотите видеть информацию о первых 10 установленных пакетах; введите 2, если хотите видеть информацию о конкретном пакете: ')
+    return 'get_app_list_choice'
+
+def get_app_list_choice(update: Update, context):
+    user_input = update.message.text
+    if user_input == '1':
+        return get_app_list_all(update, context)
+    elif user_input == '2':
+        return get_app_list_one(update, context)
+    else:
+        update.message.reply_text('Неверный ввод!')
+        return 'get_app_list_command'
 
 def echo(update: Update, context):
     update.message.reply_text(update.message.text)
@@ -107,7 +150,7 @@ def get_critical(update: Update, context):
     update.message.reply_text(linux('journalctl -p crit -n 5'))
 
 def get_ps(update: Update, context):
-    update.message.reply_text(linux('ps -A'))
+    update.message.reply_text(linux('ps -A | head -n 11'))
 
 def get_ss(update: Update, context):
     update.message.reply_text(linux('ss -s'))
@@ -122,19 +165,35 @@ def main():
     dp = updater.dispatcher
 
     # Обработчик диалога
+    convHandlerFindEmails = ConversationHandler(
+        entry_points=[CommandHandler('find_email', findEmailsCommand)],
+        states={
+            'findEmails': [MessageHandler(Filters.text & ~Filters.command, findEmails)],
+        },
+        fallbacks=[]
+    )
+
     convHandlerFindPhoneNumbers = ConversationHandler(
-        entry_points=[CommandHandler('findPhoneNumbers', findPhoneNumbersCommand)],
+        entry_points=[CommandHandler('find_phone_number', findPhoneNumbersCommand)],
         states={
             'findPhoneNumbers': [MessageHandler(Filters.text & ~Filters.command, findPhoneNumbers)],
         },
         fallbacks=[]
     )
 
-    convHandlerAppList = ConversationHandler(
-        entry_points=[CommandHandler('get_app_list', get_app_list_command)],
+    convHandlerVerifyPassword = ConversationHandler(
+        entry_points=[CommandHandler('verify_password', verifyPasswordCommand)],
         states={
-            'get_app_list_all': [MessageHandler(Filters.text & ~Filters.command, get_app_list_all)],
-            'get_app_list_one': [MessageHandler(Filters.text & ~Filters.command, get_app_list_one)],
+            'verifyPassword': [MessageHandler(Filters.text & ~Filters.command, verifyPassword)],
+        },
+        fallbacks=[]
+    )
+
+    convHandlerAppList = ConversationHandler(
+        entry_points=[CommandHandler('get_apt_list', get_app_list_command)],
+        states={
+            'get_app_list_choice': [MessageHandler(Filters.text & ~Filters.command, get_app_list_choice)],
+            'get_app_info': [MessageHandler(Filters.text & ~Filters.command, get_app_info)],
         },
         fallbacks=[]
     )
@@ -154,7 +213,9 @@ def main():
     dp.add_handler(CommandHandler("get_ss", get_ss))
     dp.add_handler(CommandHandler("get_services", get_services))
     dp.add_handler(CommandHandler("help", helpCommand))
+    dp.add_handler(convHandlerFindEmails)
     dp.add_handler(convHandlerFindPhoneNumbers)
+    dp.add_handler(convHandlerVerifyPassword)
     dp.add_handler(convHandlerAppList)
 		
 	# Регистрируем обработчик текстовых сообщений

@@ -20,6 +20,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+# Инициализируем нужные функции
 def start(update: Update, context):
     user = update.effective_user
     update.message.reply_text(f'Привет, {user.full_name}!')
@@ -57,7 +58,7 @@ def findEmails(update: Update, context):
 
 def findPhoneNumbers(update: Update, context):
     user_input = update.message.text
-    phoneNumRegex = re.compile(r'(?:\+7|8)[\- ]?\(?(\d{3})\)?[\- ]?(\d{3})[\- ]?(\d{2})[\- ]?(\d{2})')
+    phoneNumRegex = re.compile(r'(?:\+7|8)[\s\-]?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}')
     phoneNumberList = phoneNumRegex.findall(user_input)
 
     if not phoneNumberList:
@@ -66,15 +67,14 @@ def findPhoneNumbers(update: Update, context):
 
     phoneNumbers = ''
     for i, phoneNumber in enumerate(phoneNumberList):
-        formatted_number = ''.join(phoneNumber)
-        phoneNumbers += f'{i+1}. {formatted_number}\n'
+        phoneNumbers += f'{i+1}. {phoneNumber}\n'
     
     update.message.reply_text(phoneNumbers)
-    return ConversationHandler.END 
+    return ConversationHandler.END
 
 def verifyPassword(update: Update, context):
     user_input = update.message.text
-    passwordRegex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+    passwordRegex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{8,}$')
     if passwordRegex.match(user_input):
         update.message.reply_text('Пароль сложный')
     else:
@@ -105,9 +105,8 @@ def get_app_list_choice(update: Update, context):
         return get_app_list_all(update, context)
     elif user_input == '2':
         return get_app_list_one(update, context)
-    else:
-        update.message.reply_text('Неверный ввод!')
-        return 'get_app_list_command'
+    update.message.reply_text('Неверный ввод')
+    return ConversationHandler.END
 
 def echo(update: Update, context):
     update.message.reply_text(update.message.text)
@@ -164,7 +163,7 @@ def main():
     # Получаем диспетчер для регистрации обработчиков
     dp = updater.dispatcher
 
-    # Обработчик диалога
+    # Обработчики диалога
     convHandlerFindEmails = ConversationHandler(
         entry_points=[CommandHandler('find_email', findEmailsCommand)],
         states={

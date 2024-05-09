@@ -27,3 +27,29 @@
 2024-05-09 18:17:57,549 - root - INFO - Команда успешно выполнена
 2024-05-09 18:18:21,610 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
 2024-05-09 18:18:21,610 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-10 02:05:41,691 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-10 02:06:03,481 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2024-05-10 02:06:24,868 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2024-05-10 02:06:46,122 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2024-05-10 02:08:23,069 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-10 02:08:23,069 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-10 02:08:29,761 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-10 02:08:56,633 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2024-05-10 02:09:34,987 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-10 02:09:34,987 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-10 02:09:42,207 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-10 02:10:11,305 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
+	Is the server running on that host and accepting TCP/IP connections?
+
+2024-05-10 02:11:49,059 - root - INFO - Команда успешно выполнена
+2024-05-10 02:12:32,644 - root - ERROR - Ошибка при работе с Linux: [WinError 10060] Попытка установить соединение была безуспешной, т.к. от другого компьютера за требуемое время не получен нужный отклик, или было разорвано уже установленное соединение из-за неверного отклика уже подключенного компьютера
+2024-05-10 02:12:41,620 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-10 02:12:41,620 - apscheduler.scheduler - INFO - Scheduler has been shut down

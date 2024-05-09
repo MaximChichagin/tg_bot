@@ -207,7 +207,7 @@ def db(command: str, username: str, password: str, host: str, port: str, databas
             connection.close()
         if result:
             return result
-        return "Команда успешно выполнена"
+        return "Ошибка при работе с PostgreSQL"
 
 def get_emails(update: Update, context):
     update.message.reply_text(db('SELECT * FROM email_table;', username_db, password_db, host_db, port_db, database_db, 'select'))

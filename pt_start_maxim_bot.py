@@ -1,21 +1,37 @@
 import logging
 import re
 import paramiko
+import os
+import psycopg2
 
+from psycopg2 import Error
+from dotenv import load_dotenv
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 
+load_dotenv()
 
-TOKEN = "7098871610:AAE-ucrsjqPLk0Y6ed-VYUfSK9YaDpEw4iU"
+token = os.getenv('TOKEN')
 
-host = '192.168.88.182'
-port = '22'
-username = 'kali'
-password = 'kali'
+host_sys_mon = os.getenv('HOST_SYS_MON')
+port_sys_mon = os.getenv('PORT_SYS_MON')
+username_sys_mon = os.getenv('USER_SYS_MON')
+password_sys_mon = os.getenv('PASSWORD_SYS_MON')
+
+host_repl = os.getenv('HOST_REPL')
+port_repl = os.getenv('PORT_REPL')
+username_repl = os.getenv('USER_REPL')
+password_repl = os.getenv('PASSWORD_REPL')
+
+username_db = os.getenv('USER_DB')
+password_db = os.getenv('PASSWORD_DB')
+host_db = os.getenv('HOST_DB')
+port_db = os.getenv('PORT_DB')
+database_db = os.getenv('DATABASE_DB')
 
 # Подключаем логирование
 logging.basicConfig(
-    filename='logfile.txt', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+    filename='logfile.txt', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO, encoding="utf-8"
 )
 
 logger = logging.getLogger(__name__)
@@ -42,7 +58,7 @@ def verifyPasswordCommand(update: Update, context):
 
 def findEmails(update: Update, context):
     user_input = update.message.text
-    emailRegex = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b') # регулярное выражение для поиска email-адресов
+    emailRegex = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
     emailList = emailRegex.findall(user_input)
 
     if not emailList:
@@ -54,7 +70,10 @@ def findEmails(update: Update, context):
         emails += f'{i+1}. {email}\n'
     
     update.message.reply_text(emails)
-    return ConversationHandler.END
+
+    update.message.reply_text('Хотите сохранить найденные email-адреса в базе данных? (да/нет)')
+    context.user_data['emails'] = emailList
+    return 'saveEmails'
 
 def findPhoneNumbers(update: Update, context):
     user_input = update.message.text
@@ -70,6 +89,44 @@ def findPhoneNumbers(update: Update, context):
         phoneNumbers += f'{i+1}. {phoneNumber}\n'
     
     update.message.reply_text(phoneNumbers)
+
+    update.message.reply_text('Хотите сохранить найденные номера телефонов в базе данных? (да/нет)')
+    context.user_data['phone_numbers'] = phoneNumberList
+
+    return 'savePhoneNumbers'
+
+def saveEmails(update: Update, context):
+    user_response = update.message.text.lower()
+    emailList = context.user_data.get('emails', [])
+
+    if user_response == 'да':
+        for email in enumerate(emailList):
+            answer = db("INSERT INTO email_table (email) VALUES ('" + str(email[1]) + "');", username_db, password_db, host_db, port_db, database_db, 'insert')
+            
+            update.message.reply_text(answer)
+            if answer == "Ошибка при работе с PostgreSQL":
+                    return ConversationHandler.END
+        update.message.reply_text('Email-адреса успешно сохранены в базе данных')
+    else:
+        update.message.reply_text('Email-адреса не будут сохранены в базе данных')
+
+    return ConversationHandler.END
+
+def savePhoneNumbers(update: Update, context):
+    user_response = update.message.text.lower()
+    phoneNumberList = context.user_data.get('phone_numbers', [])
+
+    if user_response == 'да':
+        for phoneNumber in enumerate(phoneNumberList):
+            answer = db("INSERT INTO phone_table (phone_number) VALUES ('" + str(phoneNumber[1]) + "');", username_db, password_db, host_db, port_db, database_db, 'insert')
+            
+            update.message.reply_text(answer)
+            if answer == "Ошибка при работе с PostgreSQL":
+                    return ConversationHandler.END
+        update.message.reply_text('Номера телефонов успешно сохранены в базе данных')
+    else:
+        update.message.reply_text('Номера телефонов не будут сохранены в базе данных')
+
     return ConversationHandler.END
 
 def verifyPassword(update: Update, context):
@@ -111,54 +168,94 @@ def get_app_list_choice(update: Update, context):
 def echo(update: Update, context):
     update.message.reply_text(update.message.text)
 
-def linux(command: str):
-    client = paramiko.SSHClient()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(hostname=host, username=username, password=password, port=port)
-    stdin, stdout, stderr = client.exec_command(command)
-    data = stdout.read() + stderr.read()
-    client.close()
-    data = str(data).replace('\\n', '\n').replace('\\t', '\t')[2:-1]
-    return data
+def linux(command: str, host: str, username: str, password: str, port: str):
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(hostname=host, username=username, password=password, port=port)
+        stdin, stdout, stderr = client.exec_command(command)
+        data = stdout.read() + stderr.read()
+        client.close()
+        data = str(data).replace('\\n', '\n').replace('\\t', '\t')[2:-1]
+        logging.info("Команда успешно выполнена")
+        return data
+    except (Exception, Error) as error:
+        logging.error("Ошибка при работе с Linux: %s", error)
+        return "Не удалось установить соединение"
+
+def db(command: str, username: str, password: str, host: str, port: str, database: str, type: str):
+    connection = None
+    result = ''
+
+    try:
+        connection = psycopg2.connect(user=username, password=password, host=host, port=port, database=database)
+        cursor = connection.cursor()
+        cursor.execute(command)
+        if type == 'select':
+            data = cursor.fetchall()
+            for row in data:
+                result += str(row[0]) + ' ' + str(row[1]) + '\n'
+        elif type == 'insert':
+            connection.commit()
+        logging.info("Команда успешно выполнена")
+    except (Exception, Error) as error:
+        logging.error("Ошибка при работе с PostgreSQL: %s", error)
+        return "Ошибка при работе с PostgreSQL"
+    finally:
+        if connection is not None:
+            cursor.close()
+            connection.close()
+        if result:
+            return result
+        return "Команда успешно выполнена"
+
+def get_emails(update: Update, context):
+    update.message.reply_text(db('SELECT * FROM email_table;', username_db, password_db, host_db, port_db, database_db, 'select'))
+
+def get_phone_numbers(update: Update, context):
+    update.message.reply_text(db('SELECT * FROM phone_table;', username_db, password_db, host_db, port_db, database_db, 'select'))
 
 def get_release(update: Update, context):
-    update.message.reply_text(linux('cat /proc/version'))
+    update.message.reply_text(linux('cat /proc/version', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_uname(update: Update, context):
-    update.message.reply_text(linux('uname -o -n -r -v -p'))
+    update.message.reply_text(linux('uname -o -n -r -v -p', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_uptime(update: Update, context):
-    update.message.reply_text(linux('uptime'))
+    update.message.reply_text(linux('uptime', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_df(update: Update, context):
-    update.message.reply_text(linux('df -a -h'))
+    update.message.reply_text(linux('df -a -h', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_free(update: Update, context):
-    update.message.reply_text(linux('free -h'))
+    update.message.reply_text(linux('free -h', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_mpstat(update: Update, context):
-    update.message.reply_text(linux('mpstat -P ALL'))
+    update.message.reply_text(linux('mpstat -P ALL', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_w(update: Update, context):
-    update.message.reply_text(linux('w'))
+    update.message.reply_text(linux('w', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_auths(update: Update, context):
-    update.message.reply_text(linux('last -n 10'))
+    update.message.reply_text(linux('last -n 10', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_critical(update: Update, context):
-    update.message.reply_text(linux('journalctl -p crit -n 5'))
+    update.message.reply_text(linux('journalctl -p crit -n 5', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_ps(update: Update, context):
-    update.message.reply_text(linux('ps -A | head -n 11'))
+    update.message.reply_text(linux('ps -A | head -n 11', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_ss(update: Update, context):
-    update.message.reply_text(linux('ss -s'))
+    update.message.reply_text(linux('ss -s', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
 
 def get_services(update: Update, context):
-    update.message.reply_text(linux('service --status-all'))
+    update.message.reply_text(linux('service --status-all', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+
+def get_repl_logs(update: Update, context):
+    update.message.reply_text(linux('cat /var/log/postgresql/postgresql-15-main.log | grep repl_user | tail -n 10', host_repl, username_repl, password_repl, port_repl))
 
 def main():
-    updater = Updater(TOKEN, use_context=True)
+    updater = Updater(token, use_context=True)
 
     # Получаем диспетчер для регистрации обработчиков
     dp = updater.dispatcher
@@ -168,6 +265,7 @@ def main():
         entry_points=[CommandHandler('find_email', findEmailsCommand)],
         states={
             'findEmails': [MessageHandler(Filters.text & ~Filters.command, findEmails)],
+            'saveEmails': [MessageHandler(Filters.text & ~Filters.command, saveEmails)]
         },
         fallbacks=[]
     )
@@ -176,6 +274,7 @@ def main():
         entry_points=[CommandHandler('find_phone_number', findPhoneNumbersCommand)],
         states={
             'findPhoneNumbers': [MessageHandler(Filters.text & ~Filters.command, findPhoneNumbers)],
+            'savePhoneNumbers':  [MessageHandler(Filters.text & ~Filters.command, savePhoneNumbers)]
         },
         fallbacks=[]
     )
@@ -211,6 +310,9 @@ def main():
     dp.add_handler(CommandHandler("get_ps", get_ps))
     dp.add_handler(CommandHandler("get_ss", get_ss))
     dp.add_handler(CommandHandler("get_services", get_services))
+    dp.add_handler(CommandHandler("get_repl_logs", get_repl_logs))
+    dp.add_handler(CommandHandler("get_emails", get_emails))
+    dp.add_handler(CommandHandler("get_phone_numbers", get_phone_numbers))
     dp.add_handler(CommandHandler("help", helpCommand))
     dp.add_handler(convHandlerFindEmails)
     dp.add_handler(convHandlerFindPhoneNumbers)

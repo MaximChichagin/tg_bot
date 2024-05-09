@@ -1,43 +1,29 @@
-2024-05-08 01:59:50,173 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-08 02:03:20,178 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:03:20,271 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:03:25,829 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:03:25,916 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:03:31,155 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:03:31,243 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:03:35,865 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:03:35,951 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:04:13,650 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:04:13,736 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:04:18,572 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:04:18,655 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:04:25,692 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:04:25,781 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:04:45,331 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:04:45,420 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:04:50,031 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:04:50,115 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:04:55,242 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:04:55,327 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:05:01,615 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:05:01,699 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:05:29,624 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:05:29,711 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:06:12,377 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:06:12,463 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:06:31,511 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.6p1)
-2024-05-08 02:06:31,595 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-08 02:10:55,348 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-08 02:10:55,348 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-08 02:11:00,461 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-08 02:12:44,677 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-08 02:12:44,677 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-08 02:12:53,327 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-08 02:15:31,765 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-08 02:15:31,765 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-08 02:15:37,735 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-08 02:21:43,158 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-08 02:21:43,158 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-08 02:21:52,006 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-08 02:24:50,101 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-08 02:24:50,101 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-09 18:02:06,639 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-09 18:02:06,639 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-09 18:02:15,493 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-09 18:04:14,678 - root - INFO - Команда успешно выполнена
+2024-05-09 18:04:26,251 - root - INFO - Команда успешно выполнена
+2024-05-09 18:04:26,452 - root - INFO - Команда успешно выполнена
+2024-05-09 18:04:26,743 - root - INFO - Команда успешно выполнена
+2024-05-09 18:04:26,974 - root - INFO - Команда успешно выполнена
+2024-05-09 18:04:50,776 - root - INFO - Команда успешно выполнена
+2024-05-09 18:13:17,695 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-09 18:13:17,695 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-09 18:13:29,654 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-09 18:14:00,167 - root - INFO - Команда успешно выполнена
+2024-05-09 18:14:00,277 - root - INFO - Команда успешно выполнена
+2024-05-09 18:14:00,380 - root - INFO - Команда успешно выполнена
+2024-05-09 18:14:08,140 - root - INFO - Команда успешно выполнена
+2024-05-09 18:14:22,337 - root - INFO - Команда успешно выполнена
+2024-05-09 18:15:42,551 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-09 18:15:42,552 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-09 18:15:51,572 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-09 18:16:03,951 - root - INFO - Команда успешно выполнена
+2024-05-09 18:16:04,159 - root - INFO - Команда успешно выполнена
+2024-05-09 18:16:04,327 - root - INFO - Команда успешно выполнена
+2024-05-09 18:16:07,902 - root - INFO - Команда успешно выполнена
+2024-05-09 18:17:57,323 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.2p1)
+2024-05-09 18:17:57,416 - paramiko.transport - INFO - Authentication (password) successful!
+2024-05-09 18:17:57,549 - root - INFO - Команда успешно выполнена
+2024-05-09 18:18:21,610 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-09 18:18:21,610 - apscheduler.scheduler - INFO - Scheduler has been shut down

@@ -1,55 +1,15 @@
-2024-05-09 18:02:06,639 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-09 18:02:06,639 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-09 18:02:15,493 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-09 18:04:14,678 - root - INFO - Команда успешно выполнена
-2024-05-09 18:04:26,251 - root - INFO - Команда успешно выполнена
-2024-05-09 18:04:26,452 - root - INFO - Команда успешно выполнена
-2024-05-09 18:04:26,743 - root - INFO - Команда успешно выполнена
-2024-05-09 18:04:26,974 - root - INFO - Команда успешно выполнена
-2024-05-09 18:04:50,776 - root - INFO - Команда успешно выполнена
-2024-05-09 18:13:17,695 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-09 18:13:17,695 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-09 18:13:29,654 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-09 18:14:00,167 - root - INFO - Команда успешно выполнена
-2024-05-09 18:14:00,277 - root - INFO - Команда успешно выполнена
-2024-05-09 18:14:00,380 - root - INFO - Команда успешно выполнена
-2024-05-09 18:14:08,140 - root - INFO - Команда успешно выполнена
-2024-05-09 18:14:22,337 - root - INFO - Команда успешно выполнена
-2024-05-09 18:15:42,551 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-09 18:15:42,552 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-09 18:15:51,572 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-09 18:16:03,951 - root - INFO - Команда успешно выполнена
-2024-05-09 18:16:04,159 - root - INFO - Команда успешно выполнена
-2024-05-09 18:16:04,327 - root - INFO - Команда успешно выполнена
-2024-05-09 18:16:07,902 - root - INFO - Команда успешно выполнена
-2024-05-09 18:17:57,323 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.2p1)
-2024-05-09 18:17:57,416 - paramiko.transport - INFO - Authentication (password) successful!
-2024-05-09 18:17:57,549 - root - INFO - Команда успешно выполнена
-2024-05-09 18:18:21,610 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-09 18:18:21,610 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-10 02:05:41,691 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-10 02:06:03,481 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
-	Is the server running on that host and accepting TCP/IP connections?
+2024-05-14 03:11:30,481 - apscheduler.scheduler - INFO - Scheduler started
+2024-05-14 03:17:24,895 - root - INFO - Команда успешно выполнена
+2024-05-14 03:17:37,699 - root - INFO - Команда успешно выполнена
+2024-05-14 03:17:56,123 - root - ERROR - Ошибка при работе с PostgreSQL: duplicate key value violates unique constraint "phone_table_phone_number_key"
+DETAIL:  Key (phone_number)=(8(123)456-78-90) already exists.
 
-2024-05-10 02:06:24,868 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
-	Is the server running on that host and accepting TCP/IP connections?
+2024-05-14 03:18:38,669 - paramiko.transport - INFO - Connected (version 2.0, client OpenSSH_9.2p1)
+2024-05-14 03:18:39,063 - paramiko.transport - INFO - Authentication (password) successful!
+2024-05-14 03:18:39,201 - root - INFO - Команда успешно выполнена
+2024-05-14 03:18:56,345 - root - ERROR - Ошибка при работе с PostgreSQL: duplicate key value violates unique constraint "phone_table_phone_number_key"
+DETAIL:  Key (phone_number)=(8(123)456-78-90) already exists.
 
-2024-05-10 02:06:46,122 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
-	Is the server running on that host and accepting TCP/IP connections?
-
-2024-05-10 02:08:23,069 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-10 02:08:23,069 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-10 02:08:29,761 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-10 02:08:56,633 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
-	Is the server running on that host and accepting TCP/IP connections?
-
-2024-05-10 02:09:34,987 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-10 02:09:34,987 - apscheduler.scheduler - INFO - Scheduler has been shut down
-2024-05-10 02:09:42,207 - apscheduler.scheduler - INFO - Scheduler started
-2024-05-10 02:10:11,305 - root - ERROR - Ошибка при работе с PostgreSQL: connection to server at "192.168.186.128", port 5432 failed: Connection timed out (0x0000274C/10060)
-	Is the server running on that host and accepting TCP/IP connections?
-
-2024-05-10 02:11:49,059 - root - INFO - Команда успешно выполнена
-2024-05-10 02:12:32,644 - root - ERROR - Ошибка при работе с Linux: [WinError 10060] Попытка установить соединение была безуспешной, т.к. от другого компьютера за требуемое время не получен нужный отклик, или было разорвано уже установленное соединение из-за неверного отклика уже подключенного компьютера
-2024-05-10 02:12:41,620 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
-2024-05-10 02:12:41,620 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-14 03:20:20,627 - telegram.ext.updater - INFO - Received signal 2 (SIGINT), stopping...
+2024-05-14 03:20:21,580 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2024-05-14 03:20:31,904 - telegram.ext.updater - WARNING - Exiting immediately!

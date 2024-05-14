@@ -13,21 +13,21 @@ load_dotenv()
 
 token = os.getenv('TOKEN')
 
-host_sys_mon = os.getenv('HOST_SYS_MON')
-port_sys_mon = os.getenv('PORT_SYS_MON')
-username_sys_mon = os.getenv('USER_SYS_MON')
-password_sys_mon = os.getenv('PASSWORD_SYS_MON')
+RM_HOST = os.getenv('RM_HOST')
+RM_PORT = os.getenv('RM_PORT')
+RM_USER = os.getenv('RM_USER')
+RM_PASSWORD = os.getenv('RM_PASSWORD')
 
-host_repl = os.getenv('HOST_REPL')
-port_repl = os.getenv('PORT_REPL')
-username_repl = os.getenv('USER_REPL')
-password_repl = os.getenv('PASSWORD_REPL')
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_USER = os.getenv('USER_REPL')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
 
-username_db = os.getenv('USER_DB')
-password_db = os.getenv('PASSWORD_DB')
-host_db = os.getenv('HOST_DB')
-port_db = os.getenv('PORT_DB')
-database_db = os.getenv('DATABASE_DB')
+DB_REPL_USER = os.getenv('DB_REPL_USER')
+DB_REPL_PASSWORD = os.getenv('DB_REPL_PASSWORD')
+DB_REPL_HOST = os.getenv('DB_REPL_HOST')
+DB_REPL_PORT = os.getenv('DB_REPL_PORT')
+DB_DATABASE = os.getenv('DB_DATABASE')
 
 # Подключаем логирование
 logging.basicConfig(
@@ -101,7 +101,7 @@ def saveEmails(update: Update, context):
 
     if user_response == 'да':
         for email in enumerate(emailList):
-            answer = db("INSERT INTO email_table (email) VALUES ('" + str(email[1]) + "');", username_db, password_db, host_db, port_db, database_db, 'insert')
+            answer = db("INSERT INTO email_table (email) VALUES ('" + str(email[1]) + "');", DB_REPL_USER, DB_REPL_PASSWORD, DB_REPL_HOST, DB_REPL_PORT, DB_DATABASE, 'insert')
             
             update.message.reply_text(answer)
             if answer == "Ошибка при работе с PostgreSQL":
@@ -118,7 +118,7 @@ def savePhoneNumbers(update: Update, context):
 
     if user_response == 'да':
         for phoneNumber in enumerate(phoneNumberList):
-            answer = db("INSERT INTO phone_table (phone_number) VALUES ('" + str(phoneNumber[1]) + "');", username_db, password_db, host_db, port_db, database_db, 'insert')
+            answer = db("INSERT INTO phone_table (phone_number) VALUES ('" + str(phoneNumber[1]) + "');", DB_REPL_USER, DB_REPL_PASSWORD, DB_REPL_HOST, DB_REPL_PORT, DB_DATABASE, 'insert')
             
             update.message.reply_text(answer)
             if answer == "Ошибка при работе с PostgreSQL":
@@ -139,7 +139,7 @@ def verifyPassword(update: Update, context):
     return ConversationHandler.END
 
 def get_app_list_all(update: Update, context):
-    update.message.reply_text(linux('dpkg -l | head -n 11'))
+    update.message.reply_text(linux('dpkg -l | head -n 11', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
     return ConversationHandler.END
 
 def get_app_list_one(update: Update, context):
@@ -148,7 +148,7 @@ def get_app_list_one(update: Update, context):
 
 def get_app_info(update: Update, context):
     package_name = update.message.text.strip()
-    app_info = linux(f'dpkg -s {package_name}')
+    app_info = linux(f'dpkg -s {package_name}', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT)
     update.message.reply_text(app_info)
     return ConversationHandler.END
 
@@ -210,49 +210,49 @@ def db(command: str, username: str, password: str, host: str, port: str, databas
         return "Ошибка при работе с PostgreSQL"
 
 def get_emails(update: Update, context):
-    update.message.reply_text(db('SELECT * FROM email_table;', username_db, password_db, host_db, port_db, database_db, 'select'))
+    update.message.reply_text(db('SELECT * FROM email_table;', DB_REPL_USER, DB_REPL_PASSWORD, DB_REPL_HOST, DB_REPL_PORT, DB_DATABASE, 'select'))
 
 def get_phone_numbers(update: Update, context):
-    update.message.reply_text(db('SELECT * FROM phone_table;', username_db, password_db, host_db, port_db, database_db, 'select'))
+    update.message.reply_text(db('SELECT * FROM phone_table;', DB_REPL_USER, DB_REPL_PASSWORD, DB_REPL_HOST, DB_REPL_PORT, DB_DATABASE, 'select'))
 
 def get_release(update: Update, context):
-    update.message.reply_text(linux('cat /proc/version', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('cat /proc/version', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_uname(update: Update, context):
-    update.message.reply_text(linux('uname -o -n -r -v -p', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('uname -o -n -r -v -p', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_uptime(update: Update, context):
-    update.message.reply_text(linux('uptime', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('uptime', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_df(update: Update, context):
-    update.message.reply_text(linux('df -a -h', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('df -a -h', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_free(update: Update, context):
-    update.message.reply_text(linux('free -h', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('free -h', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_mpstat(update: Update, context):
-    update.message.reply_text(linux('mpstat -P ALL', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('mpstat -P ALL', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_w(update: Update, context):
-    update.message.reply_text(linux('w', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('w', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_auths(update: Update, context):
-    update.message.reply_text(linux('last -n 10', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('last -n 10', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_critical(update: Update, context):
-    update.message.reply_text(linux('journalctl -p crit -n 5', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('journalctl -p crit -n 5', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_ps(update: Update, context):
-    update.message.reply_text(linux('ps -A | head -n 11', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('ps -A | head -n 11', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_ss(update: Update, context):
-    update.message.reply_text(linux('ss -s', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('ss -s', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_services(update: Update, context):
-    update.message.reply_text(linux('service --status-all', host_sys_mon, username_sys_mon, password_sys_mon, port_sys_mon))
+    update.message.reply_text(linux('service --status-all', RM_HOST, RM_USER, RM_PASSWORD, RM_PORT))
 
 def get_repl_logs(update: Update, context):
-    update.message.reply_text(linux('cat /var/log/postgresql/postgresql-15-main.log | grep repl_user | tail -n 10', host_repl, username_repl, password_repl, port_repl))
+    update.message.reply_text(linux('cat /var/log/postgresql/postgresql-15-main.log | grep repl_user | tail -n 10', DB_HOST, DB_USER, DB_PASSWORD, DB_PORT))
 
 def main():
     updater = Updater(token, use_context=True)
